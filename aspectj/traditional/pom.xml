@@ -8,10 +8,10 @@
 		<artifactId>aspectj-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>annotated</artifactId>
+	<artifactId>traditional-aspect</artifactId>
 	<description>
-  	Demonstrates how to use aspectj with an annotated java class.
-  </description>
+            Demonstrates how to use aspectj with traditional aspect classes.
+        </description>
 
 	<dependencies>
 		<dependency>
@@ -34,6 +34,11 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
+				<configuration>
+					<outxml>true</outxml>
+					<verbose>true</verbose>
+					<showWeaveInfo>true</showWeaveInfo>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -5,6 +5,7 @@ package com.rts.sandbox.aspectj;
 
 import java.util.Date;
 
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -32,11 +33,26 @@ public class TransactionsAspect {
 		}
 	}
 
-	@AfterReturning("transfer() && args(from, to, amount) && this(bank)")
+	@After("transfer() && args(from, to, amount) && this(bank)")
 	public void recordTransaction(Account from, Account to, Money amount, Bank bank) {
-		System.out.println(new Date().toString() + " Transfer from account " + from.name() + " to account " + to.name()
-				+ " of amount " + amount.formatted() + " succeeded. ");
+		recordTransaction("Transfer from account " + from.name() + " to account " + to.name() + " of amount "
+				+ amount.formatted() + " succeeded. ");
 		System.out.println("   Account Balance: " + from.name() + ", " + bank.balance(from).formatted());
 		System.out.println("   Account Balance: " + to.name() + ", " + bank.balance(to).formatted());
+	}
+
+	@AfterReturning(pointcut = "execution(* com.rts.sandbox.aspectj.Bank.balance(Account)) && args(account)",
+			returning = "balance")
+	public void recordBalanceInquiry(Account account, Money balance) {
+		recordTransaction(account.name() + " inquired about their balance of " + balance.formatted() + ".");
+	}
+
+	@After("execution(* com.rts.sandbox.aspectj.Bank.balance(java.util.List))")
+	public void recordBalanceInquiry() {
+		recordTransaction("Inquiry about many accounts just happened.");
+	}
+
+	private void recordTransaction(String message) {
+		System.out.println(new Date().toString() + " " + message);
 	}
 }

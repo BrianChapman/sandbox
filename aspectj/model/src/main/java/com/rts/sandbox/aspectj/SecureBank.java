@@ -4,6 +4,7 @@
 package com.rts.sandbox.aspectj;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +52,7 @@ public class SecureBank implements Bank {
 	@Override
 	public void register(Account account, Money money) {
 		if (accounts.containsKey(account)) {
-			throw new IllegalArgumentException("Already Registered: " + account.name());
+			throw new IllegalArgumentException("Already Registered: " + account.name() + ".");
 		}
 		accounts.put(account, money);
 	}
@@ -63,6 +64,14 @@ public class SecureBank implements Bank {
 	@Override
 	public Money balance(Account account) {
 		return accounts.get(account);
+	}
+
+	public Map<Account, Money> balance(List<Account> accounts) {
+		Map<Account, Money> results = new HashMap<Account, Money>();
+		for (Account account : accounts) {
+			results.put(account, balance(account));
+		}
+		return results;
 	}
 
 	protected Account getOverdraftAccount() {
