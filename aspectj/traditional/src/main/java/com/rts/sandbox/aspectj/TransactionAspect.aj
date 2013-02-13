@@ -37,9 +37,6 @@ public aspect TransactionAspect {
 		recordTransaction("Inquiry about many accounts just happened.");
 	}
 
-	public void recordBalanceInquiry() {
-	}
-
 	private void recordTransaction(String message) {
 		System.out.println(new Date().toString() + " " + message);
 	}
